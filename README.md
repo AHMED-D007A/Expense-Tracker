@@ -1,5 +1,5 @@
 # Expense Tracker
-- simple command line interface (CLI) to fetch the recent activity of a GitHub user and display it in the terminal.
+- simple expense tracker application to manage your finances.
 - This project is from the project based road map, you can find it [here](https://roadmap.sh/backend/projects).
 - You can read more about the project form [here](https://roadmap.sh/projects/expense-tracker).
 
