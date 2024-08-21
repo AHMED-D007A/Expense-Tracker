@@ -11,6 +11,7 @@
 - Users can view a summary of all expenses.
 - Users can view a summary of expenses for a specific category or month (of current year).
 - Users can update an expense.
+- The app features saving records into a csv file.
 
 ### Usage
 ```
