@@ -39,8 +39,10 @@ func main() {
 	case "delete":
 		deleteExpense(file, os.Args...)
 	case "list":
-		listExpenses(file)
+		listExpenses(file, os.Args...)
 	case "summary":
-		summaryExpenses(file)
+		summaryExpenses(file, os.Args...)
+		// case "set":
+		// 	setBudget(os.Args...)
 	}
 }

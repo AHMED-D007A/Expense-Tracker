@@ -102,6 +102,39 @@ func addExpense(file *os.File, args ...string) {
 		log.Fatalln(err.Error())
 	}
 	defer writer.Flush()
+
+	fmt.Printf("Expense added successfully (ID: %v)\n", expense.id)
+
+	// here I will add the feature of warning the user if he exceeds the budget .
+
+	// reader := csv.NewReader(file)
+
+	// records, err := reader.ReadAll()
+	// if err != nil {
+	// 	log.Fatalln(err.Error())
+	// }
+
+	// counter, _ := strconv.Atoi(expense.amount)
+	// for i, record := range records {
+	// 	if i == 0 {
+	// 		continue
+	// 	}
+	// 	if time.Now().Month() < 10 {
+	// 		if time.Now().Month().String() == time.Month(int(record[4][6])-48).String() {
+	// 			val, _ := strconv.Atoi(record[2])
+	// 			counter += val
+	// 		}
+	// 		mm, _ := strconv.Atoi(record[4][5:7])
+	// 		if time.Now().Month().String() == time.Month(mm).String() {
+	// 			val, _ := strconv.Atoi(record[3])
+	// 			counter += val
+	// 		}
+	// 	}
+	// }
+
+	// if counter > Budget {
+	// 	fmt.Println("Warning: Total expenses has exceeded the budget, Total:", counter, "budget:", Budget)
+	// }
 }
 
 func deleteExpense(file *os.File, args ...string) {
@@ -136,6 +169,61 @@ func deleteExpense(file *os.File, args ...string) {
 	defer writer.Flush()
 }
 
-func listExpenses(file *os.File, args ...string) {}
+func listExpenses(file *os.File, args ...string) {
+	reader := csv.NewReader(file)
 
-func summaryExpenses(file *os.File, args ...string) {}
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	if len(args) == 2 {
+		for _, record := range records {
+			fmt.Println(record)
+		}
+	} else if len(args) == 4 {
+		if args[2] == "--month" || args[2] == "-m" {
+			var month string
+			if len(args[3]) == 1 {
+				month = "0" + args[3]
+			}
+			for i, record := range records {
+				if i == 0 {
+					fmt.Println(record)
+				} else if record[4][5:7] == month {
+					fmt.Println(record)
+				}
+			}
+		}
+		if args[2] == "--category" || args[2] == "-c" {
+			for i, record := range records {
+				if i == 0 {
+					fmt.Println(record)
+				} else if record[3] == args[3] {
+					fmt.Println(record)
+				}
+			}
+		}
+	}
+
+	// var newRecords [][]string
+	// for _, record := range records {
+	// 	if record[0] == args[2] {
+	// 		continue
+	// 	}
+	// 	newRecords = append(newRecords, record)
+	// }
+}
+
+func summaryExpenses(file *os.File, args ...string) {
+
+}
+
+// func setBudget(args ...string) {
+// 	Budget, err := strconv.Atoi(args[2])
+// 	if err != nil {
+// 		log.Fatalln(err.Error())
+// 	}
+
+// 	fmt.Println("Budget is set to", Budget)
+// }

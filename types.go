@@ -20,3 +20,5 @@ const (
 )
 
 var Categories = []Category{Transportation, Food, Housing, Medicals, Taxes}
+
+// var Budget int
