@@ -151,6 +151,7 @@ func deleteExpense(file *os.File, args ...string) {
 		log.Fatalln(err.Error())
 	}
 
+	// reading all new records except for the one we are going to delete.
 	var newRecords [][]string
 	for _, record := range records {
 		if record[0] == args[2] {
@@ -159,9 +160,11 @@ func deleteExpense(file *os.File, args ...string) {
 		newRecords = append(newRecords, record)
 	}
 
+	// cleaning all records
 	file.Truncate(0)
 	file.Seek(0, 0)
 
+	// writing all records in the newRecords variable.
 	writer := csv.NewWriter(file)
 	err = writer.WriteAll(newRecords)
 	if err != nil {
@@ -180,6 +183,7 @@ func listExpenses(file *os.File, args ...string) {
 		log.Fatalln(err.Error())
 	}
 
+	// checks for the user input.
 	if len(args) == 2 {
 		for _, record := range records {
 			fmt.Println(record)
@@ -197,8 +201,7 @@ func listExpenses(file *os.File, args ...string) {
 					fmt.Println(record)
 				}
 			}
-		}
-		if args[2] == "--category" || args[2] == "-c" {
+		} else if args[2] == "--category" || args[2] == "-c" {
 			cat := validateCategory(args[3])
 			for i, record := range records {
 				if i == 0 {
@@ -207,7 +210,15 @@ func listExpenses(file *os.File, args ...string) {
 					fmt.Println(record)
 				}
 			}
+		} else {
+			fmt.Println("Usage: ./expense_tracker list")
+			fmt.Println("Usage[Optional]: ./expense_tracker list -category <category>")
+			os.Exit(1)
 		}
+	} else {
+		fmt.Println("Usage: ./expense_tracker list")
+		fmt.Println("Usage[Optional]: ./expense_tracker list -category <category>")
+		os.Exit(1)
 	}
 }
 
@@ -243,8 +254,7 @@ func summaryExpenses(file *os.File, args ...string) {
 			}
 			intMonth, _ := strconv.Atoi(month)
 			fmt.Printf("Total expenses for %v: $%v\n", time.Month(intMonth).String(), counter)
-		}
-		if args[2] == "--category" || args[2] == "-c" {
+		} else if args[2] == "--category" || args[2] == "-c" {
 			cat := validateCategory(args[3])
 			for _, record := range records {
 				if record[3] == string(cat) {
@@ -253,7 +263,15 @@ func summaryExpenses(file *os.File, args ...string) {
 				}
 			}
 			fmt.Printf("Total expenses for %v: $%v\n", cat, counter)
+		} else {
+			fmt.Println("Usage: ./expense_tracker summary")
+			fmt.Println("Usage[Optional]: ./expense_tracker summary -category <category>")
+			os.Exit(1)
 		}
+	} else {
+		fmt.Println("Usage: ./expense_tracker summary")
+		fmt.Println("Usage[Optional]: ./expense_tracker summary -category <category>")
+		os.Exit(1)
 	}
 }
 
