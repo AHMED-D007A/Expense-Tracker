@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -167,6 +168,8 @@ func deleteExpense(file *os.File, args ...string) {
 		log.Fatalln(err.Error())
 	}
 	defer writer.Flush()
+
+	fmt.Println("Expense deleted successfully")
 }
 
 func listExpenses(file *os.File, args ...string) {
@@ -196,27 +199,62 @@ func listExpenses(file *os.File, args ...string) {
 			}
 		}
 		if args[2] == "--category" || args[2] == "-c" {
+			cat := validateCategory(args[3])
 			for i, record := range records {
 				if i == 0 {
 					fmt.Println(record)
-				} else if record[3] == args[3] {
+				} else if record[3] == string(cat) {
 					fmt.Println(record)
 				}
 			}
 		}
 	}
-
-	// var newRecords [][]string
-	// for _, record := range records {
-	// 	if record[0] == args[2] {
-	// 		continue
-	// 	}
-	// 	newRecords = append(newRecords, record)
-	// }
 }
 
 func summaryExpenses(file *os.File, args ...string) {
+	reader := csv.NewReader(file)
+	counter := 0
 
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	if len(args) == 2 {
+		for _, record := range records {
+			val, _ := strconv.Atoi(record[2])
+			counter += val
+		}
+		fmt.Printf("Total expenses: $%v\n", counter)
+	} else if len(args) == 4 {
+		if args[2] == "--month" || args[2] == "-m" {
+			var month string
+			if len(args[3]) == 1 {
+				month = "0" + args[3]
+			}
+			for i, record := range records {
+				if i == 0 {
+					continue
+				}
+				if record[4][5:7] == month {
+					val, _ := strconv.Atoi(record[2])
+					counter += val
+				}
+			}
+			intMonth, _ := strconv.Atoi(month)
+			fmt.Printf("Total expenses for %v: $%v\n", time.Month(intMonth).String(), counter)
+		}
+		if args[2] == "--category" || args[2] == "-c" {
+			cat := validateCategory(args[3])
+			for _, record := range records {
+				if record[3] == string(cat) {
+					val, _ := strconv.Atoi(record[2])
+					counter += val
+				}
+			}
+			fmt.Printf("Total expenses for %v: $%v\n", cat, counter)
+		}
+	}
 }
 
 // func setBudget(args ...string) {

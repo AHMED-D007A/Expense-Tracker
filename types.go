@@ -11,12 +11,12 @@ type Expense struct {
 type Category string
 
 const (
-	Transportation Category = "Transportation"
-	Food           Category = "Food"
-	Housing        Category = "Housing"
-	Medicals       Category = "Medicals"
-	Taxes          Category = "Taxes"
-	Other          Category = "Other"
+	Transportation Category = "TRANSPORTATION"
+	Food           Category = "FOOD"
+	Housing        Category = "HOUSING"
+	Medicals       Category = "MEDICALS"
+	Taxes          Category = "TAXES"
+	Other          Category = "OTHER"
 )
 
 var Categories = []Category{Transportation, Food, Housing, Medicals, Taxes}

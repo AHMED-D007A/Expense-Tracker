@@ -3,6 +3,7 @@ package main
 import (
 	"math/rand"
 	"strconv"
+	"strings"
 )
 
 func idGen() string {
@@ -12,7 +13,7 @@ func idGen() string {
 }
 
 func validateCategory(category string) Category {
-	var cat Category = Category(category)
+	var cat Category = Category(strings.ToUpper(category))
 	for _, v := range Categories {
 		if cat == v {
 			return v
