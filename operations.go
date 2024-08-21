@@ -105,6 +105,35 @@ func addExpense(file *os.File, args ...string) {
 }
 
 func deleteExpense(file *os.File, args ...string) {
+	if len(args) < 3 {
+		fmt.Println("Usage: ./expense_tracker delete <id>")
+		os.Exit(1)
+	}
+
+	reader := csv.NewReader(file)
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	var newRecords [][]string
+	for _, record := range records {
+		if record[0] == args[2] {
+			continue
+		}
+		newRecords = append(newRecords, record)
+	}
+
+	file.Truncate(0)
+	file.Seek(0, 0)
+
+	writer := csv.NewWriter(file)
+	err = writer.WriteAll(newRecords)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	defer writer.Flush()
 }
 
 func listExpenses(file *os.File, args ...string) {}
