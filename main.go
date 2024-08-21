@@ -42,6 +42,8 @@ func main() {
 		listExpenses(file, os.Args...)
 	case "summary":
 		summaryExpenses(file, os.Args...)
+	case "update":
+		updateExpense(file, os.Args...)
 		// case "set":
 		// 	setBudget(os.Args...)
 	}

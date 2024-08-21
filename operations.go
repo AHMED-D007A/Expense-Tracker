@@ -275,6 +275,49 @@ func summaryExpenses(file *os.File, args ...string) {
 	}
 }
 
+func updateExpense(file *os.File, args ...string) {
+	if len(args) < 5 {
+		fmt.Println("Usage: ./expense_tracker update <id> --amount <amount>")
+		os.Exit(1)
+	}
+
+	reader := csv.NewReader(file)
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	// reading all new records except for the one we are going to delete.
+	var newRecords [][]string
+	for _, record := range records {
+		if record[0] == args[2] {
+			if args[3] == "--description" || args[3] == "-d" {
+				record[1] = args[4]
+			} else if args[3] == "--amount" || args[3] == "-a" {
+				record[2] = args[4]
+			} else if args[3] == "--category" || args[3] == "-c" {
+				record[3] = args[4]
+			}
+		}
+		newRecords = append(newRecords, record)
+	}
+
+	// cleaning all records
+	file.Truncate(0)
+	file.Seek(0, 0)
+
+	// writing all records in the newRecords variable.
+	writer := csv.NewWriter(file)
+	err = writer.WriteAll(newRecords)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	defer writer.Flush()
+
+	fmt.Println("Expense updated successfully")
+}
+
 // func setBudget(args ...string) {
 // 	Budget, err := strconv.Atoi(args[2])
 // 	if err != nil {

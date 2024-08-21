@@ -10,7 +10,7 @@
 - Users can view all expenses for a specific category or month (of current year).
 - Users can view a summary of all expenses.
 - Users can view a summary of expenses for a specific category or month (of current year).
-- 
+- Users can update an expense.
 
 ### Usage
 ```
@@ -23,4 +23,6 @@ Usage[Optional]: ./expense_tracker list -category <category>
 
 Usage: ./expense_tracker summary
 Usage[Optional]: ./expense_tracker summary -category <category>
+
+Usage: ./expense_tracker update <id> --amount <amount>
 ```
